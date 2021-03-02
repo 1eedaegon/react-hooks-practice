@@ -1,12 +1,16 @@
 import { useState, Component } from "react";
+import { useInput } from "./customHooks"
 
 const App = () => {
+  const checkMaxLen = (value) => value.length < 10;
+  const name = useInput('Mr.', checkMaxLen);
   const [item, setItem] = useState(1)
   const incrementItem = () => setItem(item + 1)
   const decrementItem = () => setItem(item - 1)
   return (
     <div className="APP">
-      <h2>Hello React world! {item}</h2>
+      <input placeholder="Name" {...name}></input>
+      <h2>Hello!: {item}</h2>
       <button onClick={incrementItem}>+</button>
       <button onClick={decrementItem}>-</button>
     </div>

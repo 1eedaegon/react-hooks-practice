@@ -5,7 +5,7 @@ import { App, ClassifyApp } from './App';
 
 
 ReactDOM.render(
-  <ClassifyApp />
+  <App />
   ,
   document.getElementById('root')
 );
