@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export const useInput = (initValue, validator) => {
     const [value, setValue] = useState(initValue)
@@ -12,4 +12,13 @@ export const useInput = (initValue, validator) => {
         if (willUpdate) setValue(value);
     }
     return { value, onChange }
+}
+export const useTitle = initTitle => {
+    const [title, setTitle] = useState(initTitle);
+    const updateTitle = () => {
+        const htmlTitle = document.querySelector('title');
+        htmlTitle.innerText = title;
+    }
+    useEffect(updateTitle, [title])
+    return setTitle
 }
