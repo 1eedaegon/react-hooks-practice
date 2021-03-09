@@ -1,24 +1,25 @@
 import { useEffect, useRef, useState } from "react"
 
-const usePreventLeave = () => {
-  const listener = e => {
-    e.preventDefault();
-    e.returnValue = "";
+const useBeforeLeave = onBefore => {
+  const handle = (e) => {
+    const { outerHeight: windowSize } = window;
+    const { clientY: currSize } = e;
+    console.log(currSize, windowSize, "Leaving...")
   }
-  const enablePrevent = () => window.addEventListener('beforeunload', listener)
-  const disablePrevent = () => window.removeEventListener('beforeunload', listener)
-  return { enablePrevent, disablePrevent }
+  useEffect(() => {
+    document.addEventListener('mouseleave', handle)
+    return () => document.removeEventListener('mouseleave', handle)
+  }, [])
 }
 
 const App = () => {
   // States and Hooks
-  const { enablePrevent, disablePrevent } = usePreventLeave()
+  const begForLife = console.log("Please don't leave!")
+  useBeforeLeave(begForLife)
+  // UI Components
   return (
-    // Components
     <div className="App">
       <h1>Use custom hook</h1>
-      <button onClick={enablePrevent}>Protect</button>
-      <button onClick={disablePrevent}>Unprotect</button>
     </div >
   )
 }

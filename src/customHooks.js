@@ -1,5 +1,27 @@
 import { useState, useEffect, useRef } from "react"
 
+export const useBeforeLeave = onBefore => {
+    const handle = (e) => {
+        const { outerHeight: windowSize } = window;
+        const { clientY: currSize } = e;
+        console.log(currSize, windowSize, "Leaving...")
+    }
+    useEffect(() => {
+        document.addEventListener('mouseleave', handle)
+        return () => document.removeEventListener('mouseleave', handle)
+    }, [])
+}
+
+export const usePreventLeave = () => {
+    const listener = e => {
+        e.preventDefault();
+        e.returnValue = "";
+    }
+    const enablePrevent = () => window.addEventListener('beforeunload', listener)
+    const disablePrevent = () => window.removeEventListener('beforeunload', listener)
+    return { enablePrevent, disablePrevent }
+}
+
 export const useConfirm = (message = "", onConfirm, onCancel) => {
     if (onConfirm && typeof onConfirm !== "function") {
         return;
