@@ -1,4 +1,39 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
+
+export const useConfirm = (message = "", onConfirm, onCancel) => {
+    if (onConfirm && typeof onConfirm !== "function") {
+        return;
+    }
+    if (onCancel && typeof onCancel !== 'function') {
+        return;
+    }
+    const confirmAction = () => {
+        if (window.confirm(message)) {
+            onConfirm();
+        } else {
+            onCancel();
+        }
+    }
+    return confirmAction;
+}
+
+export const useClick = (onClick) => {
+    // useRef seems like document.getElementbyId :D
+    const element = useRef();
+    useEffect(() => {
+        // componentDidMount
+        if (element.current) {
+            element.current.addEventListener('click', onClick);
+        }
+        return () => {
+            // componentWillUnMount
+            if (element.current) {
+                element.current.removeEventListener('click', onClick)
+            }
+        }
+    }, [])
+    return element
+}
 
 export const useInput = (initValue, validator) => {
     const [value, setValue] = useState(initValue)
