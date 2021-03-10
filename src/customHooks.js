@@ -1,5 +1,32 @@
 import { useState, useEffect, useRef } from "react"
 
+export const useNetwork = onChange => {
+    const [status, setStatus] = useState(navigator.onLine);
+    const handleChange = () => {
+        if (typeof onChange === "function") onChange(navigator.onLine);
+        setStatus(navigator.onLine);
+    };
+    useEffect(() => {
+        window.addEventListener('online', handleChange)
+        window.addEventListener('offline', handleChange)
+        return () => {
+            window.removeEventListener('online', handleChange)
+            window.removeEventListener('offline', handleChange)
+        }
+    }, []);
+    return status;
+}
+
+export const useFadeIn = (duration = 1, delay = 0) => {
+    const element = useRef();
+    useEffect(() => {
+        const { current } = element;
+        current.style.transition = `opacity ${duration}s ease-in-out ${delay}s`;
+        current.style.opacity = 1;
+    }, [])
+    return { ref: element, style: { opacity: 0 } };
+}
+
 export const useBeforeLeave = onBefore => {
     const handle = (e) => {
         const { outerHeight: windowSize } = window;
