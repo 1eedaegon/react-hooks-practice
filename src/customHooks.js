@@ -1,5 +1,22 @@
 import { useState, useEffect, useRef } from "react"
 
+export const useScroll = () => {
+    const [state, setState] = useState({
+        x: 0, y: 0
+    })
+    const onScroll = () => {
+        setState({ x: window.scrollX, y: window.scrollY })
+        // const { scrollX: x, scrollY: y } = window
+        // console.log('x: ', x, 'y: ', y)
+    }
+    useEffect(() => {
+        window.addEventListener('scroll', onScroll);
+        return () => window.removeEventListener('scroll', onScroll)
+    }, [])
+    return state;
+}
+
+
 export const useNetwork = onChange => {
     const [status, setStatus] = useState(navigator.onLine);
     const handleChange = () => {
