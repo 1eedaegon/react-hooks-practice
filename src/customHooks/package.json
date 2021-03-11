@@ -1,0 +1,18 @@
+{
+  "name": "@custom-hooks/custom-hooks",
+  "version": "1.0.1",
+  "description": "1eedaegon's custom react hooks",
+  "main": "index.js",
+  "repository": "https://github.com/1eedaegon/react-hooks-practice",
+  "author": "1eedaegon",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "hooks"
+  ],
+  "peerDependencies": {
+    "axios": "^0.21.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}
