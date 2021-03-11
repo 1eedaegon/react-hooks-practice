@@ -2,4 +2,4 @@
 Coding React with hook!
 
 - [x] Use state
-- [ ] Use Effect
+- [x] Use Effect
