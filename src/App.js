@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from "react"
-import useAxios from "./useAxios"
-
+import { useAxios } from "@custom-hooks/custom-hooks"
 
 
 const App = () => {

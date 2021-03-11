@@ -1,6 +1,38 @@
 import { useState, useEffect, useRef } from "react"
+import defaultAxios from "axios";
 
-export const useNotification = (title, options) => {
+const useAxios = (opts, axiosInstance = defaultAxios) => {
+    const [state, setState] = useState({
+        loading: true,
+        error: null,
+        data: null
+    })
+    const [trigger, setTrigger] = useState(0)
+    const refetch = () => {
+        setState({
+            ...state,
+            loading: true
+        })
+        setTrigger(Date.now());
+    }
+    useEffect(() => {
+        axiosInstance(opts)
+            .then(data => {
+                setState({
+                    ...state,
+                    loading: false,
+                    data
+                })
+            })
+            .catch(error => {
+                setState({ ...state, loading: false, error })
+            });
+    }, [trigger])
+    return { ...state, refetch }
+}
+
+
+const useNotification = (title, options) => {
     if ("Notification" in window) {
         const fireNotif = () => {
             if (Notification.permission !== "granted") {
@@ -20,7 +52,7 @@ export const useNotification = (title, options) => {
     }
 }
 
-export const useFullScreen = (callback) => {
+const useFullScreen = (callback) => {
     const element = useRef();
     const triggerFull = () => {
         element.current.requestFullscreen();
@@ -33,7 +65,7 @@ export const useFullScreen = (callback) => {
     return { element, triggerFull, exitFull }
 }
 
-export const useScroll = () => {
+const useScroll = () => {
     const [state, setState] = useState({
         x: 0, y: 0
     })
@@ -49,7 +81,7 @@ export const useScroll = () => {
     return state;
 }
 
-export const useNetwork = onChange => {
+const useNetwork = onChange => {
     const [status, setStatus] = useState(navigator.onLine);
     const handleChange = () => {
         if (typeof onChange === "function") onChange(navigator.onLine);
@@ -66,7 +98,7 @@ export const useNetwork = onChange => {
     return status;
 }
 
-export const useFadeIn = (duration = 1, delay = 0) => {
+const useFadeIn = (duration = 1, delay = 0) => {
     const element = useRef();
     useEffect(() => {
         const { current } = element;
@@ -76,7 +108,7 @@ export const useFadeIn = (duration = 1, delay = 0) => {
     return { ref: element, style: { opacity: 0 } };
 }
 
-export const useBeforeLeave = onBefore => {
+const useBeforeLeave = onBefore => {
     const handle = (e) => {
         const { outerHeight: windowSize } = window;
         const { clientY: currSize } = e;
@@ -88,7 +120,7 @@ export const useBeforeLeave = onBefore => {
     }, [])
 }
 
-export const usePreventLeave = () => {
+const usePreventLeave = () => {
     const listener = e => {
         e.preventDefault();
         e.returnValue = "";
@@ -98,7 +130,7 @@ export const usePreventLeave = () => {
     return { enablePrevent, disablePrevent }
 }
 
-export const useConfirm = (message = "", onConfirm, onCancel) => {
+const useConfirm = (message = "", onConfirm, onCancel) => {
     if (onConfirm && typeof onConfirm !== "function") {
         return;
     }
@@ -115,7 +147,7 @@ export const useConfirm = (message = "", onConfirm, onCancel) => {
     return confirmAction;
 }
 
-export const useClick = (onClick) => {
+const useClick = (onClick) => {
     // useRef seems like document.getElementbyId :D
     const element = useRef();
     useEffect(() => {
@@ -133,7 +165,7 @@ export const useClick = (onClick) => {
     return element
 }
 
-export const useInput = (initValue, validator) => {
+const useInput = (initValue, validator) => {
     const [value, setValue] = useState(initValue)
     const onChange = event => {
         const { target: { value } } = event;
@@ -146,7 +178,7 @@ export const useInput = (initValue, validator) => {
     }
     return { value, onChange }
 }
-export const useTitle = initTitle => {
+const useTitle = initTitle => {
     const [title, setTitle] = useState(initTitle);
     const updateTitle = () => {
         const htmlTitle = document.querySelector('title');
@@ -155,3 +187,5 @@ export const useTitle = initTitle => {
     useEffect(updateTitle, [title])
     return setTitle
 }
+
+export { useAxios, useEffect, useBeforeLeave, useFullScreen, useClick, useConfirm, useFadeIn, useTitle, usePreventLeave, useScroll, useNetwork, useInput, useNotification }
