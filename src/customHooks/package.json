@@ -1,6 +1,6 @@
 {
   "name": "@custom-hooks/custom-hooks",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "1eedaegon's custom react hooks",
   "main": "index.js",
   "repository": "https://github.com/1eedaegon/react-hooks-practice",
