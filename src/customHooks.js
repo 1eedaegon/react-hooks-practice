@@ -1,5 +1,38 @@
 import { useState, useEffect, useRef } from "react"
 
+export const useNotification = (title, options) => {
+    if ("Notification" in window) {
+        const fireNotif = () => {
+            if (Notification.permission !== "granted") {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        new Notification(title, options)
+                    } else {
+                        return;
+                    }
+                })
+            }
+            else {
+                new Notification(title, options)
+            }
+        }
+        return fireNotif;
+    }
+}
+
+export const useFullScreen = (callback) => {
+    const element = useRef();
+    const triggerFull = () => {
+        element.current.requestFullscreen();
+        callback(true)
+    }
+    const exitFull = () => {
+        document.exitFullscreen()
+        callback(false)
+    }
+    return { element, triggerFull, exitFull }
+}
+
 export const useScroll = () => {
     const [state, setState] = useState({
         x: 0, y: 0
@@ -15,7 +48,6 @@ export const useScroll = () => {
     }, [])
     return state;
 }
-
 
 export const useNetwork = onChange => {
     const [status, setStatus] = useState(navigator.onLine);
